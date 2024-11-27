@@ -158,5 +158,5 @@ WHERE total_amount > 150.00;
 10. Retrieve the average total of all orders.
 
 
-SELECT AVG(total_amount) AS average_order_total
+SELECT AVG(total_amount) AS AverageOrderTotal
 FROM orders;
