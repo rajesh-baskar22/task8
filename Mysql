@@ -1,0 +1,162 @@
+e-commerce System
+
+CREATE TABLE customers (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone_number VARCHAR(15),
+    address TEXT
+);
+
+INSERT INTO customers (first_name, last_name, email, phone_number, address)
+VALUES 
+('John', 'Doe', 'john.doe@example.com', '1234567890', '123 Elm Street'),
+('Jane', 'Smith', 'jane.smith@example.com', '2345678901', '456 Oak Avenue'),
+('Mike', 'Johnson', 'mike.johnson@example.com', '3456789012', '789 Maple Drive'),
+('Emily', 'Davis', 'emily.davis@example.com', '4567890123', '321 Birch Lane'),
+('Chris', 'Brown', 'chris.brown@example.com', '5678901234', '654 Cedar Street'),
+('Sarah', 'Miller', 'sarah.miller@example.com', '6789012345', '987 Pine Avenue'),
+('David', 'Wilson', 'david.wilson@example.com', '7890123456', '123 Walnut Road'),
+('Laura', 'Moore', 'laura.moore@example.com', '8901234567', '456 Spruce Drive'),
+('James', 'Taylor', 'james.taylor@example.com', '9012345678', '789 Ash Boulevard'),
+('Sophia', 'Anderson', 'sophia.anderson@example.com', '0123456789', '321 Chestnut Street'),
+('Daniel', 'Thomas', 'daniel.thomas@example.com', '1234509876', '654 Elm Avenue'),
+('Olivia', 'Lee', 'olivia.lee@example.com', '9876543210', '987 Oak Lane'),
+('Ethan', 'White', 'ethan.white@example.com', '6543210987', '123 Maple Street'),
+('Isabella', 'Harris', 'isabella.harris@example.com', '4567891230', '456 Birch Road'),
+('Alexander', 'Clark', 'alexander.clark@example.com', '7891234560', '789 Cedar Avenue'),
+('Rajesh', 'Baskar', 'rajbas1998@example.com', '1234567890', '123 Elm Street'),
+('Sindhu', 'Rajesh', 'sindhuvvm@gmail.com', '12345678901', '123  Street22');
+
+
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    product_id INT NOT NULL,
+    order_date DATE NOT NULL,
+    quantity INT NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL,
+   
+);
+
+
+INSERT INTO orders (customer_id, product_id, order_date, quantity, total_price)
+VALUES
+(1, 1, '2024-11-20', 1, 999.99),
+(2, 2, '2024-11-21', 2, 1599.98),
+(3, 3, '2024-11-22', 1, 499.99),
+(4, 4, '2024-11-23', 3, 599.97),
+(5, 5, '2024-11-24', 1, 199.99),
+(6, 6, '2024-11-25', 2, 299.98),
+(7, 7, '2024-11-20', 1, 29.99),
+(8, 8, '2024-11-21', 4, 79.96),
+(9, 9, '2024-11-22', 1, 89.99),
+(10, 10, '2024-11-23', 2, 259.98),
+(11, 1, 5, '2024-11-20', 1, 49.99),
+(12, 2, 9, '2024-11-22', 2, 179.98),
+(13, 3, 8, '2024-11-22', 1, 19.99),
+(14, 4, 7, '2024-11-25', 1, 29.99),
+(15, 5, 6, '2024-11-25', 1, 149.99);
+
+
+
+CREATE TABLE products (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL,
+    category VARCHAR(50),
+    price DECIMAL(10, 2) NOT NULL,
+    stock_quantity INT NOT NULL
+);
+
+INSERT INTO products (product_name, category, price, stock_quantity)
+VALUES 
+('Laptop', 'Electronics', 999.99, 50),
+('Smartphone', 'Electronics', 799.99, 100),
+('Tablet', 'Electronics', 499.99, 75),
+('Headphones', 'Accessories', 199.99, 200),
+('Backpack', 'Accessories', 49.99, 150),
+('Office Chair', 'Furniture', 149.99, 40),
+('Desk Lamp', 'Furniture', 29.99, 100),
+('Water Bottle', 'Accessories', 19.99, 250),
+('Running Shoes', 'Footwear', 89.99, 60),
+('Fitness Tracker', 'Electronics', 129.99, 80);
+('Gaming Laptop', 'Electronics', 1200.00, 25),
+('Wireless Earbuds', 'Accessories', 150.00, 300),
+('4K TV', 'Electronics', 800.00, 40),
+('Mechanical Keyboard', 'Accessories', 75.00, 100),
+('Ergonomic Mouse', 'Accessories', 40.00, 150),
+('Gaming Chair', 'Furniture', 200.00, 35),
+('Smartwatch', 'Electronics', 250.00, 70),
+('Bluetooth Speaker', 'Accessories', 100.00, 90),
+('Fitness Mat', 'Fitness', 30.00, 120),
+('Treadmill', 'Fitness', 1200.00, 10);
+
+
+Queries to Write:
+
+1. Retrieve all customers who have placed an order in the last 30 days:
+
+SELECT DISTINCT name, email 
+FROM customers c
+JOIN orders o ON c.id = o.customer_id
+WHERE o.order_date >= CURDATE() - INTERVAL 30 DAY;
+
+
+2. Get the total amount of all orders placed by each customer:
+SELECT c.name, SUM(o.total_amount) AS total_spent
+FROM customers c
+JOIN orders o ON c.id = o.customer_id
+GROUP BY c.id, c.name;
+
+3. Update the price of Product C to 45.00:
+
+UPDATE products
+SET price = 45.00
+WHERE name = 'Product C';
+SELECT * from products;
+
+4. Add a new column discount to the products table.
+
+ALTER TABLE products
+ADD COLUMN discount DECIMAL(10, 2) DEFAULT 0.00;
+SELECT * from products;
+ 
+5. Retrieve the top 3 products with the highest price.
+
+SELECT *
+FROM products
+ORDER BY price DESC
+LIMIT 3;
+ 
+ 6. Get the names of customers who have ordered Product A.
+
+
+ SELECT DISTINCT c.name
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+JOIN order_items oi ON o.order_id = oi.order_id
+JOIN products p ON oi.product_id = p.product_id
+WHERE p.product_name = 'Product A';
+
+
+7. Join the orders and customers tables to retrieve the customer's name and order date for each order.
+
+SELECT c.name AS customer_name, o.order_date
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id;
+
+
+8. Retrieve the orders with a total amount greater than 150.00.
+
+SELECT *
+FROM orders
+WHERE total_amount > 150.00;
+
+
+
+10. Retrieve the average total of all orders.
+
+
+SELECT AVG(total_amount) AS average_order_total
+FROM orders;
